@@ -1,92 +1,131 @@
-# 2048
+# 2048 — Python Puzzle Game
 
-A Python version of the 2048 puzzle game. The project includes a graphical interface built with Tkinter and a terminal version. Move the tiles on a 4 × 4 board, merge matching values, and try to reach 2048.
+A Python implementation of the classic 2048 puzzle. Play on a 4 × 4 board, slide numbered tiles, merge matching values, and try to create a tile worth 2048. The project provides both a Tkinter graphical interface and a terminal version.
 
 ## Features
 
-- Play in a Tkinter graphical window or in the terminal.
-- Move tiles with the arrow keys or W/A/S/D in the graphical game.
-- Merge equal tiles and earn points for each merge.
-- Undo the last successful move and restart the board.
-- View the rules from the game with the H key.
-- Keep a saved game and high score between sessions.
-- Detect when 2048 is reached and when no moves remain.
+- Graphical game window with arrow-key and W/A/S/D controls.
+- Terminal version with text-based board display.
+- Tile movement, merging, score updates, and random tile placement.
+- One-move undo and game restart.
+- Win and game-over detection. Reaching 2048 does not stop play.
+- A saved game that can be continued later, plus a high score that persists across restarts.
+- Help instructions in both versions.
 
 ## Requirements
 
-- Python 3
-- Tkinter support for the graphical version. Tkinter is part of Python's standard library, but some Python installations package it separately.
+- Python 3.
+- Tkinter to run the graphical version. Tkinter is part of Python's standard library, although some Python distributions install its support separately.
 
-The project uses no third-party Python packages, so `pip install` is not required. To check that Tkinter is available, run:
+The project uses no third-party Python packages, so you do not need to install packages with `pip` or create a virtual environment. There is no `requirements.txt` file.
+
+To check your Python version and confirm that Tkinter is available, run:
 
 ```bash
+python3 --version
 python3 -m tkinter
 ```
 
-This opens a small sample window. Close it before launching the game. If the command reports that `tkinter` is unavailable, install Tk support for your Python installation.
+The Tkinter command opens a small sample window. Close it before starting the game. If it reports that Tkinter is missing, install the Tk support that matches your Python distribution and version.
 
 ## Run the graphical game
 
-Open Terminal, change to the folder containing this project, and run:
+Open Terminal and change to the folder containing `main.py`. Replace the example path below if you saved the project somewhere else:
 
 ```bash
+cd /path/to/2048
 python3 main.py
 ```
 
-`main.py` is the default launcher and opens the graphical game in `gui.py`. You can also launch the graphical game directly with `python3 gui.py`.
+`main.py` is the default launcher. It opens the current graphical game from `gui.py`. You can also start the GUI directly with:
+
+```bash
+python3 gui.py
+```
 
 ## Run the terminal game
 
-From the project folder, run:
+From the same project folder, run:
 
 ```bash
 python3 -c 'import main; main.main()'
 ```
 
-The terminal version asks whether to continue an existing save or start a new game. Its controls are entered by typing a key and pressing Return.
+The terminal version first shows the rules. If a valid saved game exists, it asks whether you want to continue it or start a new game. Enter a control key and press Return to make a selection or move.
 
-## Controls
+## How to play
+
+The board begins with two tiles. Use a direction key to slide every tile as far as possible in that direction. When two tiles with the same value meet, they merge into one tile with their values added together. Each successful move adds a new tile: usually a 2, and sometimes a 4. A move that does not change the board does not add a tile.
+
+The score increases by the value of each merged tile. The goal is to create a 2048 tile. After reaching 2048, you can continue playing. The game is over when the board is full and no neighboring tiles can merge.
+
+### Graphical controls
 
 | Key | Action |
 | --- | --- |
-| `W` / `↑` | Move up |
-| `A` / `←` | Move left |
-| `S` / `↓` | Move down |
-| `D` / `→` | Move right |
+| `W` or `↑` | Move up |
+| `A` or `←` | Move left |
+| `S` or `↓` | Move down |
+| `D` or `→` | Move right |
 | `U` | Undo the last successful move |
 | `R` | Start a new game and clear the saved board |
-| `H` | Show the rules |
+| `H` | Open the help window |
 | `Q` | Open the save and next-action choices |
 
-After a valid move, a new 2 or 4 tile is added. The game announces when you reach 2048, and you can keep playing. The game ends when the board is full and no matching neighboring tiles can merge.
+The window's close button opens the same choices as `Q`. When the game is over, the board is saved automatically. You can press `U` to undo the move that ended the game or `R` to start over.
 
-In the graphical version, `Q` asks whether to save before showing choices to start a new game, continue playing, or exit. The window's close button opens the same choices. If a saved game exists on startup, choose **Yes** to continue it or **No** to start a new game. Starting a new game clears the saved board but preserves the high score.
+### Terminal controls
 
-## Saving
+Type one of these keys and press Return:
 
-The game creates these files in the project folder:
+| Key | Action |
+| --- | --- |
+| `W` | Move up |
+| `A` | Move left |
+| `S` | Move down |
+| `D` | Move right |
+| `U` | Undo the last successful move |
+| `R` | Start a new game and clear the saved board |
+| `H` | Print the rules |
+| `Q` | Open the save and next-action choices |
 
-- `2048.save.txt` stores the board, current score, and high score.
-- `2048.highscore.txt` stores the best score separately so restarting does not erase it.
+## Saving and continuing
 
-The graphical game saves when you choose to save on exit and when the game ends. It saves a new high score as soon as you beat the previous record. These files are created by the game; they are not dependencies.
+The game stores its data in two files beside `file_manager.py`:
 
-## Tests
+- `2048.save.txt` stores the board, current score, and high score. The data is written as JSON even though the file ends in `.txt`.
+- `2048.highscore.txt` stores the best score separately so that starting a new game does not erase it.
 
-Run the game-logic tests from the project folder with:
+When the graphical game opens and finds a saved game, choose **Yes** to continue or **No** to start a new game. Choosing **No** clears the previous saved board but keeps the high score.
+
+When you press `Q` or close the window, the GUI first asks whether to save the current game. It then asks what to do next:
+
+- **Yes** starts a new game and keeps the saved game file.
+- **No** returns to the current game.
+- **Cancel** exits the program.
+
+The GUI does not save after every move. Choose **Yes** in the save prompt to keep your latest board and score. The game also saves the board when it ends, and saves a new high score as soon as you beat the previous record. Pressing `R` clears the saved board but keeps the high score.
+
+The terminal version has equivalent choices: at startup, enter `C` to continue or `N` to start a new game; at `Q`, enter `Y` or `N` to save, then choose `1` for a new game, `2` to continue, or another key to exit.
+
+## Run the tests
+
+The current test suite covers the core game logic. From the project folder, run:
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-## Project files
+## Project structure
 
-| File | Purpose |
+| File or folder | Purpose |
 | --- | --- |
-| `main.py` | Default launcher and terminal game logic |
-| `gui.py` | Tkinter graphical interface |
-| `board.py` | Creates the board and adds random tiles |
-| `game_logic.py` | Handles moves, merges, score, win, and game-over checks |
-| `file_manager.py` | Loads and saves game data and high scores |
-| `tests/test_game_logic.py` | Tests core game logic |
-| `gui2.py` | Older alternate GUI copy; not used by the default launcher |
+| `main.py` | Default GUI launcher and terminal game implementation |
+| `gui.py` | Tkinter window, board display, keyboard controls, and dialogs |
+| `board.py` | Creates the 4 × 4 board and adds random tiles |
+| `game_logic.py` | Handles movement, merges, score, win detection, and game-over detection |
+| `file_manager.py` | Reads and writes saved games and high scores |
+| `tests/test_game_logic.py` | Tests for the core game rules |
+| `gui2.py` | Older alternate GUI copy; it is not used by the default launcher |
+| `2048.save.txt` | Generated saved-game data, created when the game saves |
+| `2048.highscore.txt` | Generated high-score data, created when a high score is saved |
